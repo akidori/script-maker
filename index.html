@@ -655,7 +655,8 @@ JSONのみ返してください。`;
   const usr=`出演者名：${name}\n撮影日：${date}\n撮影場所：${place}\n目標尺：${dur}分\n\n${tx}`;
 
   try {
-    const res=await fetch('https://api.anthropic.com/v1/messages',{
+    const workerUrl = 'https://script-maker-api.aki-surf89315.workers.dev/';
+    const res=await fetch(workerUrl,{
       method:'POST',headers:{'Content-Type':'application/json'},
       body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:6000,system:sys,messages:[{role:'user',content:usr}]})
     });
