@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SCRIPT MAKER — BirdFlip</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy:      #0d1b2a;
+  --teal:      #1cb8a8;
+  --teal-lt:   #e6faf8;
+  --orange:    #f5a623;
+  --orange-lt: #fff8ec;
+  --pink:      #e86b8a;
+  --blue:      #3a7bd5;
+  --blue-lt:   #edf3fc;
+  --white:     #ffffff;
+  --off:       #f7f8fa;
+  --border:    #e8ecf2;
+  --text:      #0d1b2a;
+  --text-2:    #4a5568;
+  --text-3:    #8898aa;
+
+  --col-insert:   #f0faf0;
+  --col-vlog:     #fffdf0;
+  --col-kaisetsu: #f0f6ff;
+  --col-sokyu:    #fff8f0;
+  --col-bridge:   #faf0ff;
+
+  --col-insert-accent:   #4caf50;
+  --col-vlog-accent:     #f5a623;
+  --col-kaisetsu-accent: #3a7bd5;
+  --col-sokyu-accent:    #e86b8a;
+  --col-bridge-accent:   #9c27b0;
+}
+
+*{box-sizing:border-box;margin:0;padding:0;}
+
+body {
+  font-family:'Noto Sans JP',sans-serif;
+  background: var(--white);
+  color: var(--text);
+  min-height:100vh;
+}
+
+/* ========== TOP NAV ========== */
+.top-nav {
+  position: sticky; top:0; z-index:100;
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  padding: 0 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 58px;
+}
+.brand {
+  font-family:'Syne',sans-serif;
+  font-weight:800;
+  font-size:17px;
+  letter-spacing:0.04em;
+  color: var(--navy);
+}
+.brand span { color: var(--teal); }
+.nav-links {
+  display:flex; gap:0;
+}
+.nav-link {
+  font-size:12px;
+  font-weight:700;
+  letter-spacing:0.05em;
+  color: var(--text-3);
+  background:none;
+  border:none;
+  border-bottom: 2px solid transparent;
+  padding: 20px 20px;
+  cursor:pointer;
+  transition: all 0.15s;
+  font-family:'Noto Sans JP',sans-serif;
+  position: relative; bottom: -1px;
+}
+.nav-link.active { color: var(--teal); border-bottom-color: var(--teal); }
+.nav-link:hover:not(.active) { color: var(--navy); }
+.nav-right {
+  font-size:10px;
+  letter-spacing:0.1em;
+  color: var(--text-3);
+  font-family:'Syne',sans-serif;
+}
+
+/* ========== TAB CONTENT ========== */
+.tab-pane { display:none; }
+.tab-pane.active { display:block; }
+
+/* ========== PAGE LAYOUT ========== */
+.page {
+  max-width: 1160px;
+  margin: 0 auto;
+  padding: 52px 48px 80px;
+}
+
+/* ========== HERO HEADING ========== */
+.eyebrow {
+  font-family:'Syne',sans-serif;
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:0.18em;
+  color: var(--teal);
+  text-transform:uppercase;
+  margin-bottom:10px;
+}
+.hero-heading {
+  font-family:'Syne',sans-serif;
+  font-size:36px;
+  font-weight:800;
+  color: var(--navy);
+  line-height:1.1;
+  margin-bottom:14px;
+}
+.hero-heading em {
+  font-style:normal;
+  color: var(--teal);
+}
+.hero-sub {
+  font-size:13px;
+  color: var(--text-2);
+  line-height:1.8;
+  max-width:600px;
+  margin-bottom:40px;
+}
+
+/* ========== CARD ========== */
+.card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius:6px;
+  padding: 24px 28px;
+  margin-bottom:16px;
+}
+.card-label {
+  font-family:'Syne',sans-serif;
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:0.14em;
+  text-transform:uppercase;
+  color: var(--text-3);
+  margin-bottom:16px;
+  padding-bottom:12px;
+  border-bottom:1px solid var(--border);
+}
+
+/* ========== FORM ========== */
+label {
+  display:block;
+  font-size:11px;
+  font-weight:700;
+  color: var(--text-3);
+  margin-bottom:5px;
+  letter-spacing:0.04em;
+  text-transform:uppercase;
+}
+input[type=text],input[type=number] {
+  width:100%;
+  border:1px solid var(--border);
+  border-radius:5px;
+  padding:10px 12px;
+  font-size:13px;
+  font-family:'Noto Sans JP',sans-serif;
+  color: var(--text);
+  background: var(--off);
+  transition:border 0.15s, background 0.15s;
+}
+input:focus{outline:none;border-color:var(--teal);background:var(--white);}
+textarea {
+  width:100%;
+  border:1px solid var(--border);
+  border-radius:5px;
+  padding:12px 14px;
+  font-size:12.5px;
+  font-family:'Noto Sans JP',sans-serif;
+  color:var(--text);
+  resize:vertical;
+  background:var(--off);
+  transition:border 0.15s,background 0.15s;
+  line-height:1.8;
+}
+textarea:focus{outline:none;border-color:var(--teal);background:var(--white);}
+.field{margin-bottom:14px;}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+
+/* ========== BUTTONS ========== */
+.btn {
+  display:inline-flex;align-items:center;gap:8px;
+  padding:11px 22px;
+  border-radius:5px;
+  font-size:12px;font-weight:700;
+  font-family:'Noto Sans JP',sans-serif;
+  cursor:pointer;border:none;
+  letter-spacing:0.04em;
+  transition:all 0.15s;
+  text-transform:uppercase;
+}
+.btn-teal  { background:var(--teal); color:#fff; }
+.btn-teal:hover  { background:#17a096; }
+.btn-teal:disabled { background:var(--border); color:var(--text-3); cursor:not-allowed; }
+.btn-outline { background:transparent; color:var(--navy); border:1.5px solid var(--border); }
+.btn-outline:hover { border-color:var(--navy); }
+.btn-ghost { background:transparent; color:var(--teal); border:1.5px solid var(--teal); }
+.btn-ghost:hover { background:var(--teal-lt); }
+.btn-sm { padding:8px 16px; font-size:11px; }
+
+/* ========== SPINNER ========== */
+.spin {
+  display:inline-block;width:13px;height:13px;
+  border:2px solid rgba(255,255,255,0.3);
+  border-top-color:#fff;border-radius:50%;
+  animation:rotating 0.7s linear infinite;
+}
+@keyframes rotating{to{transform:rotate(360deg);}}
+
+/* ========== PROGRESS ========== */
+.prog-wrap{background:var(--border);border-radius:99px;height:3px;margin:12px 0;overflow:hidden;}
+.prog-bar{height:100%;background:var(--teal);width:0%;transition:width 0.5s;}
+
+/* ========== INFO STRIP ========== */
+.strip {
+  border-left:3px solid var(--teal);
+  background:var(--teal-lt);
+  padding:12px 16px;
+  font-size:12px;line-height:1.75;
+  color:var(--text);
+  border-radius:0 5px 5px 0;
+  margin-bottom:28px;
+}
+.strip-warn {
+  border-left-color:var(--orange);
+  background:var(--orange-lt);
+}
+
+/* ========== LEGEND ========== */
+.legend-list { display:grid; gap:6px; }
+.l-item {
+  display:flex;align-items:flex-start;gap:10px;
+  padding:9px 12px;border-radius:5px;
+  font-size:12px;line-height:1.5;
+  border-left:3px solid transparent;
+}
+.l-item.li-insert   {background:var(--col-insert);  border-color:var(--col-insert-accent);}
+.l-item.li-vlog     {background:var(--col-vlog);    border-color:var(--col-vlog-accent);}
+.l-item.li-kaisetsu {background:var(--col-kaisetsu);border-color:var(--col-kaisetsu-accent);}
+.l-item.li-sokyu    {background:var(--col-sokyu);   border-color:var(--col-sokyu-accent);}
+.l-item.li-bridge   {background:var(--col-bridge);  border-color:var(--col-bridge-accent);}
+.l-sec { font-size:10px; color:var(--text-3); margin-top:2px; }
+
+/* ========== BADGE ========== */
+.badge {
+  display:inline-block;
+  background:var(--navy);
+  color:var(--teal);
+  font-family:'Syne',sans-serif;
+  font-size:11px;font-weight:700;
+  padding:4px 12px;border-radius:3px;
+  letter-spacing:0.06em;
+}
+
+/* ========== DIVIDER ========== */
+.divider{height:1px;background:var(--border);margin:32px 0;}
+
+/* ========== SECTION HEADING (small) ========== */
+.sh {
+  font-family:'Syne',sans-serif;
+  font-size:10px;font-weight:700;
+  letter-spacing:0.14em;text-transform:uppercase;
+  color:var(--teal);
+  margin-bottom:12px;
+  padding-bottom:8px;
+  border-bottom:1px solid var(--border);
+}
+
+/* ========== TITLE RESULT ========== */
+.result-titles {
+  display:grid;grid-template-columns:1fr 1fr;gap:14px;
+  margin-bottom:20px;
+}
+.rt {
+  border-radius:6px;padding:16px 18px;
+}
+.rt-t { background:var(--teal-lt); border:1px solid rgba(28,184,168,.2); }
+.rt-s { background:var(--orange-lt); border:1px solid rgba(245,166,35,.25); }
+.rt-label {
+  font-family:'Syne',sans-serif;
+  font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;
+  margin-bottom:10px;
+}
+.rt-t .rt-label{color:var(--teal);}
+.rt-s .rt-label{color:var(--orange);}
+.rt-row{display:flex;align-items:flex-start;gap:8px;margin-bottom:6px;font-size:12px;line-height:1.5;}
+.rt-num{
+  flex-shrink:0;background:var(--teal);color:#fff;
+  font-size:9px;font-weight:700;padding:2px 6px;border-radius:3px;margin-top:2px;
+  font-family:'Syne',sans-serif;
+}
+
+/* ========== SCRIPT TABLE ========== */
+.tbl-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:6px;}
+.script-tbl{
+  width:100%;border-collapse:collapse;
+  min-width:900px;font-size:11.5px;
+}
+.script-tbl thead tr{background:var(--navy);}
+.script-tbl th{
+  color:var(--teal);
+  font-family:'Syne',sans-serif;font-size:9.5px;font-weight:700;
+  letter-spacing:0.12em;text-transform:uppercase;
+  padding:10px 8px;text-align:center;
+  border:1px solid rgba(255,255,255,0.07);
+  white-space:nowrap;position:sticky;top:0;z-index:1;
+}
+.script-tbl td{
+  border:1px solid var(--border);
+  padding:9px 10px;vertical-align:top;
+  white-space:pre-wrap;line-height:1.7;
+}
+.script-tbl tr:hover td{filter:brightness(0.975);}
+
+.type-insert   td{background:var(--col-insert);}
+.type-vlog     td{background:var(--col-vlog);}
+.type-kaisetsu td{background:var(--col-kaisetsu);}
+.type-sokyu    td{background:var(--col-sokyu);}
+.type-bridge   td{background:var(--col-bridge);}
+.type-total    td{
+  background:var(--navy);color:var(--teal);
+  font-weight:700;text-align:center;
+  font-family:'Syne',sans-serif;font-size:11px;letter-spacing:0.06em;
+}
+
+/* ========== HEARING TAB ========== */
+.h2 { font-family:'Syne',sans-serif; font-size:22px; font-weight:800; color:var(--navy); margin-bottom:6px; }
+.title-input-row{display:flex;gap:8px;align-items:center;margin-bottom:8px;}
+.tnum{
+  flex-shrink:0;background:var(--teal);color:#fff;
+  font-family:'Syne',sans-serif;font-size:10px;font-weight:700;
+  padding:4px 8px;border-radius:3px;
+}
+.scene-tbl{width:100%;border-collapse:collapse;font-size:12px;}
+.scene-tbl th{
+  background:var(--navy);color:var(--teal);
+  font-family:'Syne',sans-serif;font-size:9.5px;letter-spacing:0.08em;text-transform:uppercase;font-weight:700;
+  padding:9px 10px;text-align:left;
+}
+.scene-tbl td{border:1px solid var(--border);padding:8px 10px;vertical-align:middle;}
+.scene-tbl tr:nth-child(even) td{background:var(--off);}
+.scene-tbl select{
+  width:100%;padding:7px 10px;
+  border:1px solid var(--border);border-radius:4px;
+  font-size:12px;background:var(--off);
+  font-family:'Noto Sans JP',sans-serif;
+}
+
+/* ========== ACTION ROW ========== */
+.actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:20px 0;}
+
+/* ========== STATUS ========== */
+#status-area{display:none;}
+.status-card{
+  background:var(--off);border:1px solid var(--border);
+  border-radius:6px;padding:18px 22px;margin-bottom:16px;
+}
+.status-msg{font-size:12px;color:var(--text-2);margin-bottom:8px;}
+</style>
+</head>
+<body>
+
+<!-- TOP NAV (FANTS style) -->
+<nav class="top-nav">
+  <div class="brand">SCRIPT<span>.</span>MAKER</div>
+  <div class="nav-links">
+    <button class="nav-link active" onclick="switchTab('tab-gen',this)">01 / 台本生成</button>
+    <button class="nav-link" onclick="switchTab('tab-hear',this)">02 / ヒアリング整理</button>
+  </div>
+  <div class="nav-right">BIRDFLIP INC. — 2025</div>
+</nav>
+
+<!-- ==============================
+     TAB 1: 台本生成
+============================== -->
+<div id="tab-gen" class="tab-pane active">
+<div class="page">
+
+  <div class="eyebrow">01 / 台本生成</div>
+  <h1 class="hero-heading">文字起こし → <em>台本</em></h1>
+  <p class="hero-sub">文字起こしをそのまま貼り付けて「台本を生成」を押すだけ。<strong>文字起こしにある情報のみ</strong>を使い、ハレーション（情報の上乗せ）なしで台本を自動生成します。</p>
+
+  <div style="display:grid;grid-template-columns:1fr 340px;gap:24px;align-items:start;">
+
+    <!-- 左：フォーム -->
+    <div>
+      <div class="card">
+        <div class="card-label">基本情報</div>
+        <div class="g2">
+          <div class="field"><label>出演者名</label><input type="text" id="talent-name" placeholder="例：より野さん"></div>
+          <div class="field"><label>目標尺（分）/ 25〜30推奨</label><input type="number" id="target-duration" value="25" min="5" max="60"></div>
+          <div class="field"><label>撮影日</label><input type="text" id="shoot-date" placeholder="例：2025/03/15"></div>
+          <div class="field"><label>撮影場所</label><input type="text" id="shoot-place" placeholder="例：青山事務所、ラウンジ等"></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-label">文字起こし</div>
+        <textarea id="transcript" rows="20" placeholder="ここに文字起こしをそのまま貼り付けてください。
+
+インタビュー音声・ヒアリング会話・撮影メモなど何でもOKです。
+えー、あのー、言い直しなどのノイズはそのままでOK。
+文字起こし以外の補足メモも一緒に入れてOKです。"></textarea>
+      </div>
+
+      <div class="actions" style="margin-top:4px;">
+        <button class="btn btn-teal" id="gen-btn" onclick="generateScript()">台本を生成</button>
+        <button class="btn btn-outline btn-sm" onclick="clearAll()">クリア</button>
+      </div>
+
+      <div id="status-area">
+        <div class="status-card">
+          <div class="card-label">生成中</div>
+          <div class="status-msg" id="status-msg">準備中…</div>
+          <div class="prog-wrap"><div class="prog-bar" id="prog-bar"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 右：凡例 -->
+    <div>
+      <div class="card">
+        <div class="card-label">セクション定義</div>
+        <div class="legend-list">
+          <div class="l-item li-insert">
+            <div><strong>インサート</strong>　映像のみ / 場面説明<div class="l-sec">3〜5秒</div></div>
+          </div>
+          <div class="l-item li-vlog">
+            <div><strong>VLOG</strong>　他愛もない会話 / 人柄<div class="l-sec">15〜30秒</div></div>
+          </div>
+          <div class="l-item li-kaisetsu">
+            <div><strong>解説系</strong>　動画の核 / 伝えたいこと<div class="l-sec">30秒〜1分</div></div>
+          </div>
+          <div class="l-item li-sokyu">
+            <div><strong>訴求</strong>　最も伝えたい内容<div class="l-sec">2〜3分</div></div>
+          </div>
+          <div class="l-item li-bridge">
+            <div><strong>ブリッジ</strong>　場面転換のつなぎ<div class="l-sec">5〜10秒</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-label">ハレーションとは</div>
+        <p style="font-size:12px;line-height:1.9;color:var(--text-2);">
+          文字起こしの情報にない内容を原稿に追加してしまうこと。<br>このツールは<strong style="color:var(--text)">文字起こしにある情報だけ</strong>を使います。
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 出力エリア -->
+  <div id="output-area" style="display:none;">
+    <div class="divider"></div>
+
+    <div class="eyebrow">生成結果</div>
+    <div style="display:flex;align-items:center;gap:14px;margin-bottom:24px;">
+      <h2 class="h2" style="font-size:28px;margin:0;">台本</h2>
+      <span class="badge" id="dur-badge">—</span>
+    </div>
+
+    <div id="title-area"></div>
+
+    <div class="actions" style="margin-top:4px;">
+      <button class="btn btn-outline btn-sm" onclick="dlHTML()">HTMLダウンロード</button>
+      <button class="btn btn-ghost btn-sm" onclick="copyTSV()">TSVコピー（スプシ貼付用）</button>
+    </div>
+
+    <div class="tbl-wrap">
+      <table class="script-tbl" id="script-tbl">
+        <thead><tr>
+          <th style="width:58px">時間</th>
+          <th style="width:110px">シーン</th>
+          <th style="width:108px">セクション</th>
+          <th style="width:44px">秒数</th>
+          <th style="width:60px">所要時間</th>
+          <th style="width:48px">文字数</th>
+          <th>原稿</th>
+          <th style="width:130px">メモ</th>
+          <th style="width:130px">スタジアムコメント欄</th>
+        </tr></thead>
+        <tbody id="script-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- ==============================
+     TAB 2: ヒアリング整理
+============================== -->
+<div id="tab-hear" class="tab-pane">
+<div class="page">
+
+  <div class="eyebrow">02 / ヒアリング整理</div>
+  <h1 class="hero-heading">情報を<em>整理する</em></h1>
+  <p class="hero-sub">撮影前のヒアリング内容をまとめておく場所。台本生成後、タイトル・サムネ・ハイライトは自動で反映されます。</p>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+
+    <div class="card">
+      <div class="card-label">出演者基本情報</div>
+      <div class="field"><label>出演者名</label><input type="text" id="h-name" placeholder="例：森 由香利"></div>
+      <div class="field"><label>職業・肩書</label><input type="text" id="h-job" placeholder="例：着物スタイリスト"></div>
+      <div class="field"><label>SNS / URL</label><input type="text" id="h-sns" placeholder="例：@yukarin_kimono"></div>
+      <div class="field"><label>サロン・コミュニティ規模</label><input type="text" id="h-salon" placeholder="例：7800人"></div>
+      <div class="field"><label>特記事項</label><textarea id="h-memo" rows="3" placeholder="例：子供あり、宮崎出身、転職15回..."></textarea></div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">撮影情報</div>
+      <div class="field"><label>撮影日</label><input type="text" id="h-date" placeholder="例：2025/03/15"></div>
+      <div class="field"><label>撮影場所①</label><input type="text" id="h-place1" placeholder="例：青山事務所（港区南青山2-2-15）"></div>
+      <div class="field"><label>撮影場所②</label><input type="text" id="h-place2" placeholder="例：ラウンジ（外出先）"></div>
+      <div class="field"><label>撮影場所③</label><input type="text" id="h-place3" placeholder="例：公園・近所"></div>
+      <div class="field"><label>スケジュール備考</label><textarea id="h-schedule" rows="4" placeholder="例：9時〜子供送り出し、10時〜作業..."></textarea></div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">タイトル案</div>
+      <div class="title-input-row"><span class="tnum">案①</span><input type="text" id="h-title1" placeholder="タイトル案①"></div>
+      <div class="title-input-row"><span class="tnum">案②</span><input type="text" id="h-title2" placeholder="タイトル案②"></div>
+      <div class="title-input-row"><span class="tnum">案③</span><input type="text" id="h-title3" placeholder="タイトル案③"></div>
+      <div class="title-input-row"><span class="tnum">案④</span><input type="text" id="h-title4" placeholder="タイトル案④"></div>
+      <div class="divider" style="margin:16px 0;"></div>
+      <div class="sh">サムネイル案</div>
+      <div class="field"><label>左上テキスト</label><input type="text" id="h-tl" placeholder="例：転職15回から辿り着いた…"></div>
+      <div class="field"><label>右テキスト</label><input type="text" id="h-tr" placeholder="例：「死なない」から始める"></div>
+      <div class="field"><label>下テキスト</label><input type="text" id="h-tb" placeholder="例：フリーランス / サロン7800人"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">ハイライト（冒頭で使えるシーン・セリフ）</div>
+      <textarea id="h-hl" rows="15" placeholder="動画のフックになるシーンやセリフを書いておく。
+
+例：
+・子どもを送り出しながら放送している映像
+・「死なない、から始めてみる」
+・「仕事してる感覚が全然なくて…でもなぜか罪悪感（笑）」
+・フォロワー80万人・転職15回 のテロップ"></textarea>
+    </div>
+
+    <div class="card" style="grid-column:1 / -1;">
+      <div class="card-label">セクション構成メモ</div>
+      <div class="strip strip-warn" style="margin-bottom:14px;">
+        ⚠️ ここの内容は台本生成AIには自動連携されません。別途、文字起こしと一緒に貼り付けてください。
+      </div>
+      <table class="scene-tbl" id="scene-tbl">
+        <thead><tr>
+          <th style="width:80px">時間帯</th>
+          <th style="width:140px">シーン名</th>
+          <th style="width:130px">セクション種別</th>
+          <th>話してほしい内容・意図</th>
+          <th style="width:46px"></th>
+        </tr></thead>
+        <tbody id="scene-tbody">
+          <tr>
+            <td><input type="text" placeholder="朝7:00"></td>
+            <td><input type="text" placeholder="子どもの送り出し"></td>
+            <td><select><option>インサート</option><option>VLOG</option><option>解説系</option><option>訴求</option><option>ブリッジ</option></select></td>
+            <td><input type="text" placeholder="朝のルーティーンを見せる"></td>
+            <td style="text-align:center;"><button onclick="delRow(this)" style="border:none;background:none;color:#e86b8a;cursor:pointer;font-size:18px;">×</button></td>
+          </tr>
+        </tbody>
+      </table>
+      <div style="margin-top:10px;">
+        <button class="btn btn-ghost btn-sm" onclick="addRow()">＋ 行を追加</button>
+      </div>
+      <div class="divider" style="margin:20px 0;"></div>
+      <div class="sh">全体の流れメモ</div>
+      <textarea id="h-flow" rows="4" placeholder="例：冒頭：転職15回のテロップで掴む → 現在の最強ライフスタイル → なぜこうなったか → ミニマリストで覚醒 → 「死なない」で締め"></textarea>
+    </div>
+
+  </div>
+
+  <div class="actions" style="margin-top:8px;">
+    <button class="btn btn-teal" onclick="dlHearing()">ヒアリングシートをHTMLで保存</button>
+    <button class="btn btn-ghost" onclick="cpHearing()">テキストをコピー</button>
+  </div>
+
+</div>
+</div>
+
+<script>
+/* ---- タブ ---- */
+function switchTab(id, btn) {
+  document.querySelectorAll('.tab-pane').forEach(e=>e.classList.remove('active'));
+  document.querySelectorAll('.nav-link').forEach(e=>e.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+
+/* ---- 台本生成 ---- */
+async function generateScript() {
+  const tx = document.getElementById('transcript').value.trim();
+  if (!tx) { alert('文字起こしを入力してください'); return; }
+  const name = document.getElementById('talent-name').value || '出演者';
+  const dur  = parseInt(document.getElementById('target-duration').value) || 25;
+  const date = document.getElementById('shoot-date').value  || '未定';
+  const place= document.getElementById('shoot-place').value || '未定';
+
+  const btn = document.getElementById('gen-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spin"></span> 生成中…';
+  document.getElementById('status-area').style.display = 'block';
+  document.getElementById('output-area').style.display = 'none';
+
+  const msg = document.getElementById('status-msg');
+  const bar = document.getElementById('prog-bar');
+  const steps=[
+    {m:'文字起こしを解析しています…',p:15},
+    {m:'話題の流れを整理しています…',p:35},
+    {m:'セクション構成を設計しています…',p:55},
+    {m:'各シーンの原稿を生成しています…',p:75},
+    {m:'秒数・尺を計算しています…',p:92},
+  ];
+  let si=0;
+  const t=setInterval(()=>{
+    if(si<steps.length){msg.textContent=steps[si].m;bar.style.width=steps[si].p+'%';si++;}
+  },2000);
+
+  const sys=`あなたはYouTube動画の台本作成の専門家です。
+ヒアリング文字起こしから台本をJSON形式で出力してください。
+
+【絶対ルール】
+- 文字起こしにある情報のみを使う。情報の上乗せ・創作・推測は禁止（ハレーションを防ぐ）
+- フィラー（えー、あのー、言い直し）は整理して読みやすくする
+- 目標動画尺：${dur}分（合計秒数が${dur*60}秒前後になるよう設計）
+- セクション数・秒数を十分確保。訴求セクションは積極的に2〜3分（120〜180秒）使う
+- 秒数目安：インサート3〜5秒、ブリッジ5〜10秒、VLOG15〜30秒、解説系30〜60秒、訴求120〜180秒
+
+【JSON形式】
+{"talent":"","shoot_date":"","shoot_place":"","total_seconds":0,
+"titles":["","",""],"thumbnail":{"top_left":"","right":"","bottom":""},
+"highlights":"",
+"rows":[{"time":"","scene":"","type":"インサート or VLOG or 解説系 or 訴求 or ブリッジ",
+"seconds":0,"chars":0,"script":"","memo":"","comment":""}]}
+
+JSONのみ返してください。`;
+
+  const usr=`出演者名：${name}\n撮影日：${date}\n撮影場所：${place}\n目標尺：${dur}分\n\n${tx}`;
+
+  try {
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:6000,system:sys,messages:[{role:'user',content:usr}]})
+    });
+    clearInterval(t); bar.style.width='100%'; msg.textContent='完成！';
+    const data=await res.json();
+    const raw=data.content.map(b=>b.text||'').join('');
+    const result=JSON.parse(raw.replace(/```json|```/g,'').trim());
+    render(result);
+    setTimeout(()=>{document.getElementById('status-area').style.display='none';},600);
+  } catch(e) {
+    clearInterval(t);msg.textContent='エラー: '+e.message;bar.style.width='0%';
+  } finally {
+    btn.disabled=false; btn.innerHTML='台本を生成';
+  }
+}
+
+function esc(s){
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function render(d) {
+  /* タイトル */
+  const ta=document.getElementById('title-area');
+  let h='<div class="result-titles">';
+  h+='<div class="rt rt-t"><div class="rt-label">タイトル案</div>';
+  if(d.titles) d.titles.forEach((t,i)=>{h+=`<div class="rt-row"><span class="rt-num">案${i+1}</span><span>${esc(t)}</span></div>`;});
+  h+='</div>';
+  if(d.thumbnail){
+    h+='<div class="rt rt-s"><div class="rt-label">サムネイル案</div>';
+    h+=`<div style="font-size:12px;line-height:2;">左上：${esc(d.thumbnail.top_left||'—')}<br>右：${esc(d.thumbnail.right||'—')}<br>下：${esc(d.thumbnail.bottom||'—')}</div>`;
+    h+='</div>';
+  }
+  h+='</div>';
+  ta.innerHTML=h;
+
+  /* 尺バッジ */
+  const tot=d.total_seconds||d.rows.reduce((s,r)=>s+(r.seconds||0),0);
+  const m=Math.floor(tot/60),s=tot%60;
+  document.getElementById('dur-badge').textContent=`${m}分${s>0?s+'秒':''}`;
+
+  /* テーブル */
+  const tbody=document.getElementById('script-tbody');
+  tbody.innerHTML='';
+  const cm={'インサート':'type-insert','VLOG':'type-vlog','解説系':'type-kaisetsu','訴求':'type-sokyu','ブリッジ':'type-bridge'};
+  d.rows.forEach(r=>{
+    const cls=cm[r.type]||'';
+    const dm=Math.floor((r.seconds||0)/60),ds=(r.seconds||0)%60;
+    const ds2=dm>0?`${dm}分${ds>0?ds+'秒':''}`:`${ds}秒`;
+    const tr=document.createElement('tr');tr.className=cls;
+    tr.innerHTML=`<td>${esc(r.time||'')}</td><td>${esc(r.scene||'')}</td><td>${esc(r.type||'')}</td>
+      <td style="text-align:center">${r.seconds||''}</td><td style="text-align:center">${ds2}</td>
+      <td style="text-align:center">${r.chars||''}</td><td>${esc(r.script||'')}</td>
+      <td>${esc(r.memo||'')}</td><td></td>`;
+    tbody.appendChild(tr);
+  });
+  const tc=d.rows.reduce((s,r)=>s+(r.chars||0),0);
+  const tr2=document.createElement('tr');tr2.className='type-total';
+  tr2.innerHTML=`<td colspan="3">TOTAL</td><td>${tot}</td><td>${m}分${s>0?s+'秒':''}</td><td>${tc}</td><td colspan="3">※白い箇所に原稿を打ち込んでください</td>`;
+  tbody.appendChild(tr2);
+
+  document.getElementById('output-area').style.display='block';
+  document.getElementById('output-area').scrollIntoView({behavior:'smooth'});
+
+  /* ヒアリングタブに反映 */
+  if(d.titles){['h-title1','h-title2','h-title3'].forEach((id,i)=>{if(d.titles[i])document.getElementById(id).value=d.titles[i];});}
+  if(d.thumbnail){document.getElementById('h-tl').value=d.thumbnail.top_left||'';document.getElementById('h-tr').value=d.thumbnail.right||'';document.getElementById('h-tb').value=d.thumbnail.bottom||'';}
+  if(d.highlights)document.getElementById('h-hl').value=d.highlights;
+  if(d.talent)document.getElementById('h-name').value=d.talent;
+  if(d.shoot_date)document.getElementById('h-date').value=d.shoot_date;
+}
+
+/* ---- ダウンロード ---- */
+function dlHTML(){
+  const name=document.getElementById('talent-name').value||'出演者';
+  const badge=document.getElementById('dur-badge').textContent;
+  const date=document.getElementById('shoot-date').value||'未定';
+  const place=document.getElementById('shoot-place').value||'未定';
+  const tblH=document.getElementById('script-tbl').outerHTML;
+  const taH=document.getElementById('title-area').innerHTML;
+
+  const html=`<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<title>【スタジアム様】${name}構成</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Noto Sans JP',sans-serif;font-size:12px;background:#fff;color:#0d1b2a;padding:40px;}
+h1{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;margin-bottom:6px;}
+.meta{font-size:11px;color:#8898aa;margin-bottom:24px;}
+.badge{display:inline-block;background:#0d1b2a;color:#1cb8a8;font-family:'Syne',sans-serif;font-size:11px;font-weight:700;padding:4px 12px;border-radius:3px;margin-left:10px;}
+.result-titles{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:18px;}
+.rt{border-radius:6px;padding:14px 16px;}
+.rt-t{background:#e6faf8;border:1px solid rgba(28,184,168,.2);}
+.rt-s{background:#fff8ec;border:1px solid rgba(245,166,35,.25);}
+.rt-label{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px;}
+.rt-t .rt-label{color:#1cb8a8;}.rt-s .rt-label{color:#f5a623;}
+.rt-row{display:flex;align-items:flex-start;gap:8px;margin-bottom:6px;font-size:12px;}
+.rt-num{flex-shrink:0;background:#1cb8a8;color:#fff;font-size:9px;font-weight:700;padding:2px 6px;border-radius:3px;margin-top:2px;font-family:'Syne',sans-serif;}
+.tbl-wrap{overflow-x:auto;border:1px solid #e8ecf2;border-radius:6px;}
+table{width:100%;border-collapse:collapse;min-width:900px;font-size:11.5px;}
+thead tr{background:#0d1b2a;}
+th{color:#1cb8a8;font-family:'Syne',sans-serif;font-size:9.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:10px 8px;text-align:center;border:1px solid rgba(255,255,255,.07);white-space:nowrap;}
+td{border:1px solid #e8ecf2;padding:9px 10px;vertical-align:top;white-space:pre-wrap;line-height:1.7;}
+.type-insert td{background:#f0faf0;}.type-vlog td{background:#fffdf0;}
+.type-kaisetsu td{background:#f0f6ff;}.type-sokyu td{background:#fff8f0;}
+.type-bridge td{background:#faf0ff;}
+.type-total td{background:#0d1b2a;color:#1cb8a8;font-weight:700;text-align:center;font-family:'Syne',sans-serif;font-size:11px;letter-spacing:.06em;}
+</style></head><body>
+<h1>【スタジアム様】${name}構成 <span class="badge">${badge}</span></h1>
+<div class="meta">撮影日：${date}　|　撮影場所：${place}</div>
+${taH}
+<div class="tbl-wrap">${tblH}</div>
+</body></html>`;
+
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([html],{type:'text/html;charset=utf-8'}));
+  a.download=`${name}_台本.html`;a.click();
+}
+
+function copyTSV(){
+  let t='時間\tシーン\tセクション\t秒数\t所要時間\t文字数\t原稿\tメモ\tコメント\n';
+  document.querySelectorAll('#script-tbody tr').forEach(r=>{
+    t+=Array.from(r.querySelectorAll('td')).map(c=>c.textContent.replace(/\n/g,' ')).join('\t')+'\n';
+  });
+  navigator.clipboard.writeText(t).then(()=>alert('コピーしました！スプレッドシートにそのまま貼り付けできます。'));
+}
+
+function clearAll(){
+  if(!confirm('入力内容をすべてクリアしますか？'))return;
+  ['transcript','talent-name','shoot-date','shoot-place'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('output-area').style.display='none';
+  document.getElementById('status-area').style.display='none';
+}
+
+/* ---- シーン行 ---- */
+function addRow(){
+  const tr=document.createElement('tr');
+  tr.innerHTML=`<td><input type="text" placeholder="例：10:00"></td>
+    <td><input type="text" placeholder="シーン名"></td>
+    <td><select style="width:100%;padding:7px 10px;border:1px solid var(--border);border-radius:4px;font-size:12px;background:var(--off);font-family:'Noto Sans JP',sans-serif;">
+      <option>インサート</option><option>VLOG</option><option>解説系</option><option>訴求</option><option>ブリッジ</option>
+    </select></td>
+    <td><input type="text" placeholder="話してほしい内容・意図"></td>
+    <td style="text-align:center"><button onclick="delRow(this)" style="border:none;background:none;color:#e86b8a;cursor:pointer;font-size:18px;">×</button></td>`;
+  document.getElementById('scene-tbody').appendChild(tr);
+}
+function delRow(b){b.closest('tr').remove();}
+
+/* ---- ヒアリングシート保存 ---- */
+function dlHearing(){
+  const name=document.getElementById('h-name').value||'出演者';
+  const flds={job:'h-job',sns:'h-sns',salon:'h-salon',memo:'h-memo',date:'h-date',p1:'h-place1',p2:'h-place2',p3:'h-place3',sch:'h-schedule'};
+  const v={};Object.keys(flds).forEach(k=>{v[k]=document.getElementById(flds[k]).value||'';});
+  const titles=[1,2,3,4].map(i=>document.getElementById(`h-title${i}`).value).filter(Boolean);
+  const tl=document.getElementById('h-tl').value,tr=document.getElementById('h-tr').value,tb=document.getElementById('h-tb').value;
+  const hl=document.getElementById('h-hl').value,flow=document.getElementById('h-flow').value;
+  const rows=Array.from(document.querySelectorAll('#scene-tbody tr')).map(r=>{
+    const c=r.querySelectorAll('td');
+    return{time:c[0]?.querySelector('input')?.value||'',scene:c[1]?.querySelector('input')?.value||'',type:c[2]?.querySelector('select')?.value||'',intent:c[3]?.querySelector('input')?.value||''};
+  });
+
+  const html=`<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<title>ヒアリングシート - ${name}</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Noto Sans JP',sans-serif;font-size:12px;background:#fff;color:#0d1b2a;padding:40px;}
+h1{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;margin-bottom:20px;}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;}
+.card{border:1px solid #e8ecf2;border-radius:6px;padding:18px 22px;}
+.cl{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#8898aa;margin:12px 0 5px;padding-bottom:8px;border-bottom:1px solid #e8ecf2;}
+.cl:first-child{margin-top:0;}
+.v{font-size:12px;white-space:pre-wrap;line-height:1.8;}
+table{width:100%;border-collapse:collapse;}
+thead tr{background:#0d1b2a;}
+th{color:#1cb8a8;font-family:'Syne',sans-serif;font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;padding:9px 10px;text-align:left;}
+td{border:1px solid #e8ecf2;padding:8px 10px;font-size:11.5px;}
+tr:nth-child(even) td{background:#f7f8fa;}
+.tn{background:#1cb8a8;color:#fff;font-size:9px;font-weight:700;padding:2px 6px;border-radius:3px;margin-right:6px;font-family:'Syne',sans-serif;}
+.tr-row{display:flex;align-items:flex-start;gap:8px;margin-bottom:6px;font-size:12px;}
+</style></head><body>
+<h1>ヒアリングシート：${name}</h1>
+<div class="grid">
+<div class="card">
+<div class="cl">出演者情報</div>
+<div class="cl">名前</div><div class="v">${name}</div>
+<div class="cl">職業</div><div class="v">${v.job}</div>
+<div class="cl">SNS/URL</div><div class="v">${v.sns}</div>
+<div class="cl">サロン規模</div><div class="v">${v.salon}</div>
+<div class="cl">備考</div><div class="v">${v.memo}</div>
+</div>
+<div class="card">
+<div class="cl">撮影情報</div>
+<div class="cl">日程</div><div class="v">${v.date}</div>
+<div class="cl">場所①</div><div class="v">${v.p1}</div>
+<div class="cl">場所②</div><div class="v">${v.p2}</div>
+<div class="cl">場所③</div><div class="v">${v.p3}</div>
+<div class="cl">スケジュール</div><div class="v">${v.sch}</div>
+</div></div>
+<div class="card" style="margin-bottom:16px;">
+<div class="cl">タイトル案</div>
+${titles.map((t,i)=>`<div class="tr-row"><span class="tn">案${i+1}</span><span>${t}</span></div>`).join('')}
+<div class="cl" style="margin-top:14px;">サムネイル</div>
+<div class="v">左上：${tl}<br>右：${tr}<br>下：${tb}</div>
+</div>
+<div class="card" style="margin-bottom:16px;">
+<div class="cl">ハイライト</div><div class="v">${hl}</div>
+</div>
+<div class="card">
+<div class="cl">セクション構成メモ</div>
+<table><thead><tr><th>時間帯</th><th>シーン名</th><th>種別</th><th>意図・内容</th></tr></thead>
+<tbody>${rows.map(r=>`<tr><td>${r.time}</td><td>${r.scene}</td><td>${r.type}</td><td>${r.intent}</td></tr>`).join('')}</tbody></table>
+<div class="cl" style="margin-top:16px;">全体の流れ</div><div class="v">${flow}</div>
+</div>
+</body></html>`;
+
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([html],{type:'text/html;charset=utf-8'}));
+  a.download=`ヒアリングシート_${name}.html`;a.click();
+}
+
+function cpHearing(){
+  const name=document.getElementById('h-name').value;
+  const titles=[1,2,3,4].map(i=>document.getElementById(`h-title${i}`).value).filter(Boolean).map((t,i)=>`案${i+1}：${t}`).join('\n');
+  const text=`【ヒアリングシート】${name}\n\nタイトル案：\n${titles}\n\nハイライト：\n${document.getElementById('h-hl').value}\n\n全体の流れ：\n${document.getElementById('h-flow').value}`;
+  navigator.clipboard.writeText(text).then(()=>alert('コピーしました！'));
+}
+</script>
+</body>
+</html>
